@@ -472,6 +472,40 @@ button:hover, #addBtn:hover, .secondary:hover{
 }
 </style>
 
+
+<style>
+.customer-search-wrap{position:relative !important;}
+.customer-suggestions{
+  position:absolute !important;
+  top:100% !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:9999 !important;
+  display:none;
+  max-height:280px !important;
+  overflow-y:auto !important;
+  background:#fff !important;
+  border:1px solid #b8cbe8 !important;
+  border-radius:12px !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.18) !important;
+  margin-top:6px !important;
+}
+.customer-option{
+  padding:10px 12px !important;
+  cursor:pointer !important;
+  border-bottom:1px solid #eef3fb !important;
+  font-size:14px !important;
+  line-height:1.35 !important;
+  color:#14213d !important;
+}
+.customer-option:hover{background:#eaf4ff !important;}
+.customer-option b{display:block;color:#06468e !important;}
+.customer-option small{display:block;color:#475569;margin-top:3px;}
+@media(max-width:768px){
+  .customer-suggestions{position:relative !important;max-height:220px !important;}
+}
+</style>
+
 </head>
 <body>
   <div class="page-bg"></div>
@@ -7915,6 +7949,121 @@ Zoom Motors Himmatnagar,Himat Nagar,"7069266996 , 9879340992"
 Zuberbhai Sevalia,Baroda,9879328438
 Zulfikar Ali Sagir Alam Valak,Kamrej,"8200639203 , 9904171009"
 Zuzarbhai Dahod,Dahod,9427035552
+</script>
+
+<script>
+/* CUSTOMER SEARCH FORCE FIX */
+(function(){
+  function cleanText(v){ return String(v || '').replace(/\uFEFF/g,'').replace(/\s+/g,' ').trim(); }
+  function searchText(v){ return cleanText(v).toLowerCase().replace(/[^a-z0-9]+/gi,' '); }
+  function parseCSV(text){
+    text = String(text || '').replace(/^\uFEFF/, '');
+    const rows=[]; let row=[], cell='', q=false;
+    for(let i=0;i<text.length;i++){
+      const ch=text[i], nx=text[i+1];
+      if(ch === '"' && q && nx === '"'){ cell+='"'; i++; continue; }
+      if(ch === '"'){ q=!q; continue; }
+      if(ch === ',' && !q){ row.push(cell.trim()); cell=''; continue; }
+      if((ch === '\n' || ch === '\r') && !q){
+        if(ch === '\r' && nx === '\n') i++;
+        row.push(cell.trim());
+        if(row.some(x=>String(x).trim()!=='')) rows.push(row);
+        row=[]; cell='';
+        continue;
+      }
+      cell += ch;
+    }
+    row.push(cell.trim());
+    if(row.some(x=>String(x).trim()!=='')) rows.push(row);
+    if(!rows.length) return [];
+    const heads = rows.shift().map(cleanText);
+    return rows.map(r=>{
+      const o={}; heads.forEach((h,i)=>o[h]=cleanText(r[i]||'')); return o;
+    });
+  }
+  function loadCustomersFromEmbedded(){
+    const el = document.getElementById('embeddedCustomerCsv');
+    const rows = parseCSV(el ? el.textContent : '');
+    window.customers = rows.map(r=>({
+      name: cleanText(r['Customer Name'] || r.Customer || r.Name || Object.values(r)[0] || ''),
+      city: cleanText(r.City || r.city || Object.values(r)[1] || ''),
+      mobile: cleanText(r.Mobile || r.mobile || r['Mobile Number'] || r.Phone || Object.values(r)[2] || '')
+    })).filter(x=>x.name);
+    console.log('Force loaded customers:', window.customers.length);
+  }
+  function ensureSuggestionBox(){
+    const input = document.getElementById('customerSearch');
+    if(!input) return null;
+    let box = document.getElementById('customerSuggestions');
+    if(!box){
+      box = document.createElement('div');
+      box.id = 'customerSuggestions';
+      box.className = 'customer-suggestions';
+      input.parentElement.appendChild(box);
+    }
+    return box;
+  }
+  window.showCustomerSuggestions = function(){
+    const input = document.getElementById('customerSearch');
+    const box = ensureSuggestionBox();
+    if(!input || !box) return;
+    const city = document.getElementById('customerCity');
+    const mobile = document.getElementById('customerMobile');
+    if(city) city.value = '';
+    if(mobile) mobile.value = '';
+    const q = searchText(input.value);
+    if(q.length < 2){ box.style.display='none'; box.innerHTML=''; return; }
+    const words = q.split(/\s+/).filter(Boolean);
+    const list = (window.customers || []).filter(c=>{
+      const t = searchText(c.name + ' ' + c.city + ' ' + c.mobile);
+      return words.every(w => t.includes(w));
+    }).slice(0, 35);
+    window.currentCustomerList = list;
+    if(!list.length){
+      box.innerHTML = '<div class="customer-option">No customer found<br><small>Loaded customers: '+((window.customers||[]).length)+'</small></div>';
+      box.style.display = 'block';
+      return;
+    }
+    box.innerHTML = list.map((c,i)=>
+      '<div class="customer-option" data-idx="'+i+'"><b>'+escapeHtml(c.name)+'</b><small>City: '+escapeHtml(c.city||'-')+' | Mobile: '+escapeHtml(c.mobile||'-')+'</small></div>'
+    ).join('');
+    box.style.display = 'block';
+  };
+  window.selectCustomer = function(i){
+    const c = (window.currentCustomerList || [])[Number(i)];
+    if(!c) return;
+    document.getElementById('customerSearch').value = c.name;
+    const city = document.getElementById('customerCity');
+    const mobile = document.getElementById('customerMobile');
+    if(city) city.value = c.city || '';
+    if(mobile) mobile.value = c.mobile || '';
+    const box = document.getElementById('customerSuggestions');
+    if(box) box.style.display='none';
+  };
+  window.escapeHtml = window.escapeHtml || function(s){
+    return String(s).replace(/[&<>"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; });
+  };
+  function bindCustomerSearch(){
+    loadCustomersFromEmbedded();
+    const input = document.getElementById('customerSearch');
+    const box = ensureSuggestionBox();
+    if(!input || !box) return;
+    input.removeAttribute('list');
+    input.setAttribute('autocomplete','off');
+    input.addEventListener('input', window.showCustomerSuggestions);
+    input.addEventListener('keyup', window.showCustomerSuggestions);
+    input.addEventListener('focus', window.showCustomerSuggestions);
+    box.addEventListener('click', function(e){
+      const opt = e.target.closest('.customer-option');
+      if(opt && opt.dataset.idx !== undefined) window.selectCustomer(opt.dataset.idx);
+    });
+    document.addEventListener('click', function(e){
+      if(!e.target.closest('.customer-search-wrap')) box.style.display='none';
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindCustomerSearch);
+  else bindCustomerSearch();
+})();
 </script>
 
 </body>
