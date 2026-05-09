@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Platinum Coach Cabin Fan Scheme</title>
+  <link rel="stylesheet" href="style.css" />
+
+<style>
+/* --- Enhanced Platinum Logo, Buttons & Celebration --- */
+.platinum-logo{
+  width: 210px !important;
+  max-height: 95px !important;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.28)) drop-shadow(0 0 10px rgba(255,214,0,.45));
+  transform: scale(1.08);
+}
+.brand-row{
+  align-items:center;
+  gap: 24px !important;
+}
+button, #addBtn, .secondary{
+  transition: transform .22s ease, box-shadow .22s ease, filter .22s ease, background .22s ease;
+  cursor: pointer;
+}
+button:hover, #addBtn:hover, .secondary:hover{
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(0,82,180,.28);
+  filter: brightness(1.06);
+}
+#addBtn{
+  position: relative;
+  overflow: hidden;
+}
+#addBtn::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.45) 45%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform .55s ease;
+}
+#addBtn:hover::after{
+  transform: translateX(120%);
+}
+.offer-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin: 10px 0 16px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg,#ffde59,#ff9f00);
+  color:#082b62;
+  font-weight: 900;
+  letter-spacing:.3px;
+  box-shadow: 0 10px 22px rgba(224,151,0,.28);
+  border: 2px solid rgba(255,255,255,.75);
+  animation: pulseOffer 1.7s infinite ease-in-out;
+}
+@keyframes pulseOffer{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.035)}
+}
+.place-order-wrap{
+  margin-top:18px;
+  text-align:right;
+}
+#placeOrderBtn{
+  border:0;
+  border-radius:16px;
+  padding:15px 28px;
+  font-size:18px;
+  font-weight:900;
+  color:white;
+  background: linear-gradient(135deg,#ff9f00,#e01e37,#0b5ec2);
+  box-shadow: 0 12px 28px rgba(224,30,55,.30);
+}
+.celebration-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background: rgba(4,15,35,.62);
+  backdrop-filter: blur(6px);
+}
+.celebration-card{
+  position:relative;
+  width:min(560px,90vw);
+  padding:42px 28px;
+  text-align:center;
+  border-radius:30px;
+  background: radial-gradient(circle at top,#fff7d1,#ffffff 54%,#eaf4ff);
+  box-shadow: 0 26px 75px rgba(0,0,0,.35);
+  overflow:hidden;
+  animation: popIn .35s ease-out;
+}
+.celebration-card h2{
+  margin:0 0 10px;
+  font-size:42px;
+  color:#06468e;
+}
+.celebration-card p{
+  font-size:23px;
+  font-weight:800;
+  margin:0;
+  color:#111827;
+}
+.celebration-card .customer-thanks{
+  margin-top:8px;
+  color:#d89b00;
+  font-size:30px;
+}
+#closeCelebration{
+  margin-top:24px;
+  border:0;
+  border-radius:999px;
+  padding:12px 24px;
+  color:white;
+  font-weight:800;
+  background:#0b5ec2;
+}
+.confetti-piece{
+  position:absolute;
+  width:10px;
+  height:18px;
+  top:-25px;
+  border-radius:3px;
+  animation: confettiFall 2.4s linear forwards;
+}
+@keyframes popIn{
+  from{opacity:0; transform:scale(.82)}
+  to{opacity:1; transform:scale(1)}
+}
+@keyframes confettiFall{
+  0%{transform:translateY(-30px) rotate(0deg); opacity:1}
+  100%{transform:translateY(760px) rotate(720deg); opacity:0}
+}
+@media(max-width:700px){
+  .platinum-logo{width:160px !important;}
+  .celebration-card h2{font-size:32px;}
+}
+</style>
+
+
+<style>
+/* --- Clear Mobile Mode --- */
+@media (max-width: 768px){
+  body{
+    margin:0 !important;
+    padding:0 !important;
+    overflow-x:hidden !important;
+  }
+  .page-bg{
+    opacity:.45;
+  }
+  .hero{
+    padding:14px 10px !important;
+    border-radius:0 0 18px 18px !important;
+  }
+  .brand-row{
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+    gap:10px !important;
+    flex-wrap:wrap !important;
+    margin-bottom:12px !important;
+  }
+  .raj-logo{
+    max-width:150px !important;
+    height:auto !important;
+  }
+  .platinum-logo{
+    width:135px !important;
+    max-height:58px !important;
+    transform:none !important;
+    filter: drop-shadow(0 5px 9px rgba(0,0,0,.28)) !important;
+  }
+  .hero-grid{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+    text-align:center !important;
+  }
+  .tag{
+    font-size:13px !important;
+    padding:7px 10px !important;
+    display:inline-block !important;
+  }
+  .offer-badge{
+    font-size:12px !important;
+    padding:8px 10px !important;
+    line-height:1.25 !important;
+    white-space:normal !important;
+    border-radius:14px !important;
+  }
+  h1{
+    font-size:30px !important;
+    line-height:1.08 !important;
+    margin:10px 0 !important;
+    word-break:keep-all !important;
+  }
+  h1 mark{
+    display:inline-block !important;
+    padding:2px 8px !important;
+    border-radius:9px !important;
+  }
+  .hero-copy p{
+    font-size:14px !important;
+    line-height:1.45 !important;
+    margin:8px 0 !important;
+  }
+  .fan-card{
+    padding:8px !important;
+    margin:auto !important;
+    max-width:92vw !important;
+  }
+  .fan-card img{
+    width:100% !important;
+    max-height:280px !important;
+    object-fit:contain !important;
+  }
+  .container{
+    width:100% !important;
+    padding:10px !important;
+    box-sizing:border-box !important;
+  }
+  .panel{
+    padding:14px !important;
+    margin:12px 0 !important;
+    border-radius:18px !important;
+  }
+  .panel h2{
+    font-size:22px !important;
+    margin:0 0 12px !important;
+  }
+  .form-grid,
+  .picker-grid{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+  }
+  label{
+    font-size:14px !important;
+  }
+  input, select, button{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    font-size:15px !important;
+    min-height:44px !important;
+  }
+  #addBtn, #placeOrderBtn, .secondary{
+    border-radius:12px !important;
+    padding:12px 14px !important;
+  }
+  .details{
+    font-size:14px !important;
+    line-height:1.55 !important;
+    padding:12px !important;
+    overflow-wrap:anywhere !important;
+  }
+  .section-head{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+  }
+  .table-wrap{
+    overflow-x:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    border-radius:12px !important;
+  }
+  table{
+    min-width:920px !important;
+    font-size:13px !important;
+  }
+  th,td{
+    padding:8px 7px !important;
+    white-space:nowrap !important;
+  }
+  .totals{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+  }
+  .totals > div{
+    padding:12px !important;
+    border-radius:14px !important;
+  }
+  .place-order-wrap{
+    text-align:center !important;
+  }
+  .celebration-card{
+    width:88vw !important;
+    padding:30px 18px !important;
+    border-radius:22px !important;
+  }
+  .celebration-card h2{
+    font-size:27px !important;
+    line-height:1.15 !important;
+  }
+  .celebration-card p{
+    font-size:17px !important;
+  }
+  .celebration-card .customer-thanks{
+    font-size:22px !important;
+    overflow-wrap:anywhere !important;
+  }
+}
+
+@media (max-width: 420px){
+  h1{
+    font-size:25px !important;
+  }
+  .platinum-logo{
+    width:118px !important;
+  }
+  .raj-logo{
+    max-width:132px !important;
+  }
+  .fan-card img{
+    max-height:230px !important;
+  }
+  .panel h2{
+    font-size:20px !important;
+  }
+  .hint{
+    font-size:13px !important;
+    line-height:1.4 !important;
+  }
+}
+</style>
+
+
+<style>
+.whatsapp-btn{
+  margin-left:12px;
+  border:0;
+  border-radius:16px;
+  padding:15px 28px;
+  font-size:18px;
+  font-weight:900;
+  color:white;
+  background: linear-gradient(135deg,#25D366,#128C7E);
+  box-shadow: 0 12px 28px rgba(18,140,126,.28);
+}
+.whatsapp-btn:hover{
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 14px 30px rgba(18,140,126,.36);
+}
+@media (max-width: 768px){
+  .place-order-wrap{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+  }
+  .whatsapp-btn{
+    margin-left:0 !important;
+    width:100% !important;
+    font-size:16px !important;
+    padding:13px 14px !important;
+    border-radius:12px !important;
+  }
+}
+</style>
+
+
+<style>
+.order-action-buttons{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.order-action-buttons .secondary,
+.order-action-buttons .whatsapp-btn{
+  width:auto;
+  margin:0;
+}
+.whatsapp-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+@media (max-width:768px){
+  .order-action-buttons{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    width:100% !important;
+  }
+  .order-action-buttons .secondary,
+  .order-action-buttons .whatsapp-btn{
+    width:100% !important;
+  }
+}
+</style>
+
+
+<style>
+/* Platinum logo size equal to Raj Group logo */
+.platinum-logo{
+  width: 260px !important;
+  max-height: 160px !important;
+  object-fit: contain !important;
+  transform: none !important;
+  filter: drop-shadow(0 12px 18px rgba(0,0,0,.30)) drop-shadow(0 0 12px rgba(255,214,0,.45)) !important;
+}
+@media (max-width:768px){
+  .platinum-logo{
+    width: 150px !important;
+    max-height: 90px !important;
+  }
+}
+@media (max-width:420px){
+  .platinum-logo{
+    width: 132px !important;
+    max-height: 80px !important;
+  }
+}
+</style>
+
+</head>
+<body>
+  <div class="page-bg"></div>
+  <header class="hero">
+    <div class="brand-row">
+      <img src="assets/raj-group-logo.png" class="raj-logo" alt="Raj Group" />
+      <img src="assets/platinum-logo.png" class="platinum-logo" alt="Platinum" />
+    </div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="tag">COACH CABIN FAN</div>
+        <h1>₹10,000 <mark>1 Bill Value</mark> पर <span>1 PCS FOC</span></h1>
+        <p>Mix product <b>1 Bill Value</b> ₹10,000 या उससे ऊपर होने पर auto scheme calculate होगी. ₹20,000 पर 2 PCS FOC, ₹30,000 पर 3 PCS FOC.</p>
+      </div>
+      <div class="fan-card">
+        <img src="assets/coach-fan.png" alt="Coach Fan" />
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel order-info">
+      <h2>Order Details</h2>
+      <div class="form-grid">
+        <label>Order Date
+          <input id="orderDate" type="date" />
+        </label>
+        <label>Customer Search / Name
+          <input id="customerSearch" list="customerList" placeholder="Customer name search karo" />
+          <datalist id="customerList"></datalist>
+        </label>
+        <label>Mobile Number
+          <input id="customerMobile" type="tel" placeholder="Customer mobile number" />
+        </label>
+      </div>
+      <p class="hint">Customer list auto <b>assets/Customer.csv</b> se aur product list auto <b>data/products.csv</b> se load hogi. Product add/rate change CSV me kar do, phir page refresh karo.</p>
+    </section>
+
+    <section class="panel product-picker">
+      <h2>Add Product</h2>
+      <div class="picker-grid">
+        <label>Product Dropdown
+          <select id="productSelect"></select>
+        </label>
+        <label>Qty
+          <input id="qty" type="number" min="0" value="0" />
+        </label>
+        <button id="addBtn">Add to Order</button>
+      </div>
+      <div id="productDetails" class="details"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <h2>Order Items</h2>
+        <div class="order-action-buttons"><button id="printBtn" class="secondary">Print / Save PDF</button><button id="whatsappShareTopBtn" class="whatsapp-btn">💬 WhatsApp Share</button></div>
+      </div>
+      <div class="table-wrap">
+        <table id="orderTable">
+          <thead>
+            <tr>
+              <th>Group</th><th>Code</th><th>Description</th><th>Unit</th><th>HSN</th><th>MRP Rate</th><th>Less 55%</th><th>Net Rate</th><th>Qty</th><th>Amount</th><th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="totals">
+        <div><span>Total Qty</span><b id="totalQty">0</b></div>
+        <div><span>Total Value</span><b id="totalValue">₹0.00</b></div>
+        <div class="foc"><span>Scheme FOC</span><b id="focQty">0 PCS</b></div>
+      </div>
+    </section>
+  </main>
+
+
+<div id="celebrationOverlay" class="celebration-overlay">
+  <div class="celebration-card" id="celebrationCard">
+    <h2>🎊 Thank You For Order 🎊</h2>
+    <p>Order Successfully Placed</p>
+    <p class="customer-thanks" id="celebrationCustomer">Customer</p>
+    <button id="closeCelebration">Close</button>
+  </div>
+</div>
+
+<script>
+const DEFAULT_PRODUCTS = [
+ {Group:'Platinum',Code:'RE601',Description:'Re-601 Coach (Cabin) Fan 24V (12)',Unit:'PCS','HSN Code':'841420',Rate:1483,GST:'GST18'},
+ {Group:'Platinum',Code:'RE602',Description:'C*** Re-602 Coach (Cabin) Fan (12V) 12',Unit:'PCS','HSN Code':'841420',Rate:1451,GST:'GST18'},
+ {Group:'Platinum-Spl',Code:'RE603',Description:'Z999*Re-603 Coach (Cabin) Fan 24V (9)',Unit:'PCS','HSN Code':'841420',Rate:1142,GST:'GST18'},
+ {Group:'Platinum-Spl',Code:'RE604',Description:'Z999*Re-604 Coach (Cabin) Fan (12V) (9)',Unit:'PCS','HSN Code':'841420',Rate:1142,GST:'GST18'},
+ {Group:'Platinum-Spl',Code:'RE605',Description:'605 Silent Coach Fan (9\") 225Mm (12V) Uni.',Unit:'PCS','HSN Code':'841420',Rate:1571,GST:'GST18'},
+ {Group:'Platinum-Spl',Code:'RE605A',Description:'605(A) Silent Coach Fan (9\") 225Mm (24V) Uni.',Unit:'PCS','HSN Code':'841420',Rate:1571,GST:'GST18'}
+];
+let products = [...DEFAULT_PRODUCTS];
+let order = [];
+let customers = ['ABC Traders','Shree Sales','Raj Motors'];
+const rupee = n => '₹' + Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const netRate = r => Number(r||0) * 0.45;
+async function init(){
+  document.getElementById('orderDate').valueAsDate = new Date();
+  await loadCsvData();
+  renderProducts(); renderCustomers(); calc();
+  document.getElementById('productSelect').addEventListener('change', () => { showDetails(); resetQty(); });
+  document.getElementById('addBtn').addEventListener('click', addProduct);
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+  document.getElementById('placeOrderBtn').addEventListener('click', celebrateOrder);
+  document.getElementById('whatsappShareTopBtn').addEventListener('click', shareWhatsAppOrder);
+  document.getElementById('closeCelebration').addEventListener('click', () => document.getElementById('celebrationOverlay').style.display='none');
+}
+async function loadCsvData(){
+  try{
+    const productText = await fetch('data/products.csv', {cache:'no-store'}).then(r => r.ok ? r.text() : Promise.reject());
+    const rows = csvToObjects(productText);
+    const loaded = normalizeProducts(rows);
+    if(loaded.length) products = loaded;
+  }catch(e){ console.warn('data/products.csv auto load nahi hua, default products use honge.', e); }
+  try{
+    const customerText = await fetch('assets/Customer.csv', {cache:'no-store'}).then(r => r.ok ? r.text() : Promise.reject());
+    const rows = csvToObjects(customerText);
+    const loaded = rows.map(r => r['Customer Name'] || r.Name || r.Customer || Object.values(r)[0]).filter(Boolean);
+    if(loaded.length) customers = loaded;
+  }catch(e){ console.warn('assets/Customer.csv auto load nahi hua, default customers use honge.', e); }
+}
+function resetQty(){ document.getElementById('qty').value = 0; }
+function renderCustomers(){ document.getElementById('customerList').innerHTML = customers.map(c=>`<option value="${escapeHtml(c)}"></option>`).join(''); }
+function renderProducts(){
+  const sel = document.getElementById('productSelect');
+  sel.innerHTML = products.map((p,i)=>`<option value="${i}">${p.Code} - ${p.Group} - ${p.Description} - ${rupee(p.Rate)}</option>`).join('');
+  showDetails(); resetQty();
+}
+function showDetails(){
+  const p = products[document.getElementById('productSelect').value] || products[0];
+  if(!p) return;
+  document.getElementById('productDetails').innerHTML = `<b>Group:</b> ${p.Group} &nbsp; <b>Code:</b> ${p.Code} &nbsp; <b>Unit:</b> ${p.Unit} &nbsp; <b>HSN:</b> ${p['HSN Code']} &nbsp; <b>GST:</b> ${p.GST}<br><b>Description:</b> ${p.Description}<br><b>MRP:</b> ${rupee(p.Rate)} | <b>Net after 55% Less:</b> ${rupee(netRate(p.Rate))}`;
+}
+function addProduct(){
+  const p = products[document.getElementById('productSelect').value];
+  const qty = Number(document.getElementById('qty').value || 0);
+  if(!p){ alert('Product select karo.'); return; }
+  if(qty <= 0){ alert('Qty 0 se jyada enter karo.'); return; }
+  order.push({...p, Qty: qty}); renderOrder(); resetQty();
+}
+function renderOrder(){
+  const body = document.querySelector('#orderTable tbody');
+  body.innerHTML = order.map((p,i)=>{
+    const nr = netRate(p.Rate), amt = nr * p.Qty;
+    return `<tr><td>${p.Group}</td><td>${p.Code}</td><td>${p.Description}</td><td>${p.Unit}</td><td>${p['HSN Code']}</td><td>${rupee(p.Rate)}</td><td>55%</td><td>${rupee(nr)}</td><td>${p.Qty}</td><td>${rupee(amt)}</td><td><button class="remove" onclick="removeItem(${i})">×</button></td></tr>`;
+  }).join(''); calc();
+}
+function removeItem(i){ order.splice(i,1); renderOrder(); }
+function calc(){
+  const totalQty = order.reduce((s,p)=>s+Number(p.Qty||0),0);
+  const total = order.reduce((s,p)=>s+netRate(p.Rate)*Number(p.Qty||0),0);
+  const foc = Math.floor(total/10000);
+  document.getElementById('totalQty').textContent = totalQty;
+  document.getElementById('totalValue').textContent = rupee(total);
+  document.getElementById('focQty').textContent = foc + ' PCS';
+}
+
+
+function shareWhatsAppOrder(){
+  const customerName = document.getElementById('customerSearch').value.trim() || 'Not Selected';
+  const mobileNo = document.getElementById('customerMobile') ? document.getElementById('customerMobile').value.trim() : '';
+  const orderDate = document.getElementById('orderDate').value || '';
+  if(order.length === 0){
+    alert('Pehle product add karo, phir WhatsApp par order share karo.');
+    return;
+  }
+  const totalQty = order.reduce((s,p)=>s+Number(p.Qty||0),0);
+  const total = order.reduce((s,p)=>s+netRate(p.Rate)*Number(p.Qty||0),0);
+  const foc = Math.floor(total/10000);
+
+  let msg = '';
+  msg += 'RAJ AGENCIES - COACH CABIN FAN ORDER%0A';
+  msg += '--------------------------------%0A';
+  msg += 'Order Date: ' + orderDate + '%0A';
+  msg += 'Customer Name: ' + customerName + '%0A';
+  msg += 'Mobile Number: ' + (mobileNo || '-') + '%0A';
+  msg += 'Order Type: Platinum Coach Cabin Fan Scheme%0A%0A';
+  msg += 'Product Details:%0A';
+
+  order.forEach((p,i)=>{
+    const nr = netRate(p.Rate);
+    const amt = nr * Number(p.Qty||0);
+    msg += (i+1) + ') Code: ' + p.Code + '%0A';
+    msg += '   Group: ' + p.Group + '%0A';
+    msg += '   Description: ' + p.Description + '%0A';
+    msg += '   Unit: ' + p.Unit + ' | HSN: ' + p['HSN Code'] + ' | GST: ' + p.GST + '%0A';
+    msg += '   MRP: ' + rupee(p.Rate) + ' | Net Rate: ' + rupee(nr) + '%0A';
+    msg += '   Qty: ' + p.Qty + ' | Amount: ' + rupee(amt) + '%0A%0A';
+  });
+
+  msg += '--------------------------------%0A';
+  msg += 'Total Qty: ' + totalQty + '%0A';
+  msg += 'Total Billing Value: ' + rupee(total) + '%0A';
+  msg += 'Scheme FOC: ' + foc + ' PCS%0A';
+  msg += '--------------------------------%0A';
+  msg += 'Thank You';
+
+  const phone = '917046533330';
+  window.open('https://wa.me/' + phone + '?text=' + msg, '_blank');
+}
+
+function celebrateOrder(){
+  const customer = document.getElementById('customerSearch').value.trim() || 'Valued Customer';
+  document.getElementById('celebrationCustomer').textContent = customer;
+  const overlay = document.getElementById('celebrationOverlay');
+  const card = document.getElementById('celebrationCard');
+  overlay.style.display = 'flex';
+  card.querySelectorAll('.confetti-piece').forEach(e => e.remove());
+  const colors = ['#ffde59','#ff5a5f','#00a8ff','#22c55e','#a855f7','#f97316'];
+  for(let i=0;i<90;i++){
+    const p = document.createElement('span');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100 + '%';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = (Math.random()*0.8) + 's';
+    p.style.animationDuration = (1.6 + Math.random()*1.4) + 's';
+    p.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
+    card.appendChild(p);
+  }
+}
+
+function readSheet(e, cb){
+  const file = e.target.files[0]; if(!file) return;
+  if(!window.XLSX && !file.name.toLowerCase().endsWith('.csv')) { alert('Excel read library internet se load nahi hui. CSV upload karo ya internet ON karke reload karo.'); return; }
+  const reader = new FileReader();
+  reader.onload = evt => {
+    let rows=[];
+    if(file.name.toLowerCase().endsWith('.csv')){
+      rows = csvToObjects(evt.target.result);
+    } else {
+      const wb = XLSX.read(evt.target.result, {type:'array'});
+      rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:''});
+    }
+    cb(rows);
+  };
+  file.name.toLowerCase().endsWith('.csv') ? reader.readAsText(file) : reader.readAsArrayBuffer(file);
+}
+function normalizeProducts(rows){
+ return rows.map(r=>({Group:r.Group||'',Code:r.Code||'',Description:r.Description||'',Unit:r.Unit||'PCS','HSN Code':r['HSN Code']||r.HSN||'',Rate:Number(r.Rate||0),GST:r.GST||''})).filter(r=>r.Code && r.Rate);
+}
+function csvToObjects(text){
+ const lines = text.trim().split(/\r?\n/); const heads = lines.shift().split(',').map(h=>h.trim());
+ return lines.map(line=>{ const cells=line.match(/("[^"]*(""[^"]*)*"|[^,]*)/g).filter((_,i)=>i%2===0).map(c=>c.replace(/^"|"$/g,'').replace(/""/g,'"')); let o={}; heads.forEach((h,i)=>o[h]=cells[i]||''); return o; });
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+init();
+</script>
+</body>
+</html>
