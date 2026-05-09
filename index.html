@@ -506,12 +506,72 @@ button:hover, #addBtn:hover, .secondary:hover{
 }
 </style>
 
+
+<style>
+.dhamaka-offer{margin:0 auto;padding:14px 28px;border-radius:999px;font-size:30px;font-weight:1000;letter-spacing:.8px;color:#fff;text-align:center;white-space:nowrap;background:linear-gradient(135deg,#ff3131,#ff9f00,#ffe600,#ff3131);border:4px solid #fff;box-shadow:0 0 0 4px rgba(255,204,0,.35),0 15px 35px rgba(255,49,49,.35),0 0 28px rgba(255,230,0,.65);text-shadow:0 3px 5px rgba(0,0,0,.35);animation:dhamakaZoom 1.05s ease-in-out infinite;}
+@keyframes dhamakaZoom{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.16);filter:brightness(1.18)}}
+.brand-row{justify-content:space-between !important;}
+@media(max-width:768px){.dhamaka-offer{order:3;width:100%;font-size:20px;padding:10px 16px;margin-top:8px;}}
+@media(max-width:420px){.dhamaka-offer{font-size:17px;}}
+</style>
+
+
+
+<style>
+.order-remark-wrap{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+}
+.order-remark-wrap label{
+  font-weight:800;
+  color:#17345a;
+}
+#orderRemark{
+  width:100%;
+  min-height:76px;
+  resize:vertical;
+  box-sizing:border-box;
+  border:1px solid #b8cbe8;
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:15px;
+  font-family:inherit;
+  outline:none;
+  background:#fff;
+}
+#orderRemark:focus{
+  border-color:#0b5ec2;
+  box-shadow:0 0 0 3px rgba(11,94,194,.12);
+}
+@media(max-width:768px){
+  #orderRemark{min-height:88px;}
+}
+</style>
+
+<style>
+.place-order-wrap{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap;}
+#downloadOrderBtn{
+  border:0;
+  border-radius:16px;
+  padding:15px 28px;
+  font-size:18px;
+  font-weight:900;
+  color:#082b62;
+  background:linear-gradient(135deg,#ffe45c,#f5b301);
+  box-shadow:0 12px 28px rgba(245,179,1,.26);
+}
+#downloadOrderBtn:hover{transform:translateY(-3px) scale(1.03);}
+@media(max-width:768px){.place-order-wrap{display:grid!important;grid-template-columns:1fr!important;}#downloadOrderBtn,#placeOrderBtn{width:100%!important;}}
+</style>
 </head>
 <body>
   <div class="page-bg"></div>
   <header class="hero">
     <div class="brand-row">
       <img src="assets/raj-group-logo.png" class="raj-logo" alt="Raj Group" />
+      <div class="dhamaka-offer">🔥 DHAMAKA OFFER 🔥</div>
       <img src="assets/platinum-logo.png" class="platinum-logo" alt="Platinum" />
     </div>
     <div class="hero-grid">
@@ -537,14 +597,9 @@ button:hover, #addBtn:hover, .secondary:hover{
           <input id="customerSearch" type="text" autocomplete="off" placeholder="Party name search karo (2-3 word)" />
           <div id="customerSuggestions" class="customer-suggestions"></div>
         </label>
-        <label>City
-          <input id="customerCity" type="text" placeholder="Auto city" readonly />
-        </label>
-        <label>Mobile Number
-          <input id="customerMobile" type="tel" placeholder="Auto mobile number" readonly />
-        </label>
+        <input id="customerCity" type="hidden" />
+        <input id="customerMobile" type="hidden" />
       </div>
-      <p class="hint">Customer list auto <b>data/customers.csv</b> se aur product list auto <b>data/products.csv</b> se load hogi. Product add/rate change CSV me kar do, phir page refresh karo.</p>
     </section>
 
     <section class="panel product-picker">
@@ -564,7 +619,6 @@ button:hover, #addBtn:hover, .secondary:hover{
     <section class="panel">
       <div class="section-head">
         <h2>Order Items</h2>
-        <div class="order-action-buttons"><button id="printBtn" class="secondary">Print / Save PDF</button><button id="whatsappShareTopBtn" class="whatsapp-btn">💬 WhatsApp Share</button></div>
       </div>
       <div class="table-wrap">
         <table id="orderTable">
@@ -581,6 +635,11 @@ button:hover, #addBtn:hover, .secondary:hover{
         <div><span>Total Value</span><b id="totalValue">₹0.00</b></div>
         <div class="foc"><span>Scheme FOC</span><b id="focQty">0 PCS</b></div>
       </div>
+      <div class="order-remark-wrap">
+        <label for="orderRemark">Remark</label>
+        <textarea id="orderRemark" placeholder="Customer remark yahan likhe..."></textarea>
+      </div>
+      <div class="place-order-wrap"><button id="downloadOrderBtn">Download Order PDF</button><button id="placeOrderBtn">Place Order</button></div>
     </section>
   </main>
 
@@ -600,311 +659,269 @@ const DEFAULT_PRODUCTS = [
  {Group:'Platinum',Code:'RE602',Description:'C*** Re-602 Coach (Cabin) Fan (12V) 12',Unit:'PCS','HSN Code':'841420',Rate:1451,GST:'GST18'},
  {Group:'Platinum-Spl',Code:'RE603',Description:'Z999*Re-603 Coach (Cabin) Fan 24V (9)',Unit:'PCS','HSN Code':'841420',Rate:1142,GST:'GST18'},
  {Group:'Platinum-Spl',Code:'RE604',Description:'Z999*Re-604 Coach (Cabin) Fan (12V) (9)',Unit:'PCS','HSN Code':'841420',Rate:1142,GST:'GST18'},
- {Group:'Platinum-Spl',Code:'RE605',Description:'605 Silent Coach Fan (9\") 225Mm (12V) Uni.',Unit:'PCS','HSN Code':'841420',Rate:1571,GST:'GST18'},
- {Group:'Platinum-Spl',Code:'RE605A',Description:'605(A) Silent Coach Fan (9\") 225Mm (24V) Uni.',Unit:'PCS','HSN Code':'841420',Rate:1571,GST:'GST18'}
+ {Group:'Platinum-Spl',Code:'RE605',Description:'605 Silent Coach Fan (9") 225Mm (12V) Uni.',Unit:'PCS','HSN Code':'841420',Rate:1571,GST:'GST18'},
+ {Group:'Platinum-Spl',Code:'RE605A',Description:'605(A) Silent Coach Fan (9") 225Mm (24V) Uni.',Unit:'PCS','HSN Code':'841420',Rate:1571,GST:'GST18'}
 ];
 let products = [...DEFAULT_PRODUCTS];
 let order = [];
-let customers = [{name:'ABC Traders',city:'',mobile:''},{name:'Shree Sales',city:'',mobile:''},{name:'Raj Motors',city:'',mobile:''}];
+let customers = [];
+let currentCustomerList = [];
 const rupee = n => '₹' + Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
 const netRate = r => Number(r||0) * 0.45;
+const byId = id => document.getElementById(id);
 async function init(){
-  document.getElementById('orderDate').valueAsDate = new Date();
-  await loadCsvData();
-  renderProducts(); renderCustomers(); calc();
-  document.getElementById('productSelect').addEventListener('change', () => { showDetails(); resetQty(); });
-  document.getElementById('addBtn').addEventListener('click', addProduct);
-  document.getElementById('printBtn').addEventListener('click', () => window.print());
-  document.getElementById('placeOrderBtn').addEventListener('click', celebrateOrder);
-  document.getElementById('whatsappShareTopBtn').addEventListener('click', shareWhatsAppOrder);
-  document.getElementById('closeCelebration').addEventListener('click', () => document.getElementById('celebrationOverlay').style.display='none');
+  if(byId('orderDate')) byId('orderDate').valueAsDate = new Date();
+  await loadCsvData(); renderProducts(); setupCustomerSearch(); calc();
+  byId('productSelect')?.addEventListener('change', () => { showDetails(); resetQty(); });
+  byId('addBtn')?.addEventListener('click', addProduct);
+  byId('placeOrderBtn')?.addEventListener('click', shareWhatsAppOrder);
+  byId('downloadOrderBtn')?.addEventListener('click', downloadOrderPDF);
+  byId('closeCelebration')?.addEventListener('click', () => byId('celebrationOverlay').style.display='none');
 }
-
 async function loadCsvData(){
   try{
-    const productText = await fetch('data/products.csv', {cache:'no-store'}).then(r => r.ok ? r.text() : Promise.reject());
-    const rows = csvToObjects(productText);
-    const loaded = normalizeProducts(rows);
+    const productText = await fetchFirstAvailable(['data/products.csv','data/product.csv','data/Products.csv','data/Product.csv']);
+    const loaded = normalizeProducts(csvToObjects(productText));
     if(loaded.length) products = loaded;
-  }catch(e){ console.warn('data/products.csv auto load nahi hua, default products use honge.', e); }
-
+    console.log('Products loaded:', products.length);
+  }catch(e){ console.warn('Product CSV load nahi hua, default products use honge.', e); }
   try{
     let customerText = '';
-    try{
-      customerText = await fetchFirstAvailable(['data/customers.csv','data/Customer.csv','assets/customers.csv','assets/Customer.csv']);
-    }catch(fetchError){
-      const embedded = document.getElementById('embeddedCustomerCsv');
-      customerText = embedded ? embedded.textContent : '';
-    }
-
-    const rows = csvToObjects(customerText);
-    const loaded = rows.map(r => ({
-      name: cleanText(r['Customer Name'] || r['Customer'] || r.Name || r.Party || Object.values(r)[0] || ''),
-      city: cleanText(r.City || r.city || Object.values(r)[1] || ''),
-      mobile: cleanText(r.Mobile || r.mobile || r['Mobile Number'] || r.Phone || r.phone || Object.values(r)[2] || '')
-    })).filter(r => r.name);
-
+    try{ customerText = await fetchFirstAvailable(['data/customers.csv','data/customer.csv','data/Customers.csv','data/Customer.csv']); }
+    catch(fetchError){ const embedded = byId('embeddedCustomerCsv'); customerText = embedded ? embedded.textContent : ''; }
+    const loaded = normalizeCustomers(csvToObjects(customerText));
     if(loaded.length) customers = loaded;
     console.log('Customers loaded:', customers.length);
-  }catch(e){
-    console.warn('Customer CSV load nahi hua.', e);
-  }
+  }catch(e){ console.warn('Customer CSV load nahi hua.', e); }
 }
-
-function resetQty(){ document.getElementById('qty').value = 0; }
-function renderCustomers(){
-  const input = document.getElementById('customerSearch');
-  const box = document.getElementById('customerSuggestions');
-  if(!input || !box) return;
-  input.addEventListener('input', showCustomerSuggestions);
-  input.addEventListener('focus', showCustomerSuggestions);
-  document.addEventListener('click', (e)=>{
-    if(!e.target.closest('.customer-search-wrap')) box.style.display = 'none';
-  });
+async function fetchFirstAvailable(paths){
+  for(const path of paths){ try{ const res = await fetch(path, {cache:'no-store'}); if(res.ok) return await res.text(); }catch(e){} }
+  throw new Error('CSV not found: ' + paths.join(', '));
 }
-
-
-function showCustomerSuggestions(){
-  const input = document.getElementById('customerSearch');
-  const box = document.getElementById('customerSuggestions');
-  const raw = input.value;
-  const q = searchText(raw);
-  document.getElementById('customerCity').value = '';
-  document.getElementById('customerMobile').value = '';
-  if(q.length < 2){
-    box.style.display = 'none';
-    box.innerHTML = '';
-    return;
-  }
-  const words = q.split(/\s+/).filter(Boolean);
-  const list = customers.filter(c => {
-    const text = searchText(c.name + ' ' + c.city + ' ' + c.mobile);
-    return words.every(w => text.includes(w));
-  }).slice(0, 30);
-  if(!list.length){
-    box.innerHTML = '<div class="customer-option">No customer found<br><small>CSV file data loaded: '+customers.length+' customers</small></div>';
-    box.style.display = 'block';
-    return;
-  }
-  box.innerHTML = list.map((c,i)=>`
-    <div class="customer-option" onclick="selectCustomer(${i})">
-      <b>${escapeHtml(c.name)}</b>
-      <small>City: ${escapeHtml(c.city || '-')} &nbsp; | &nbsp; Mobile: ${escapeHtml(c.mobile || '-')}</small>
-    </div>
-  `).join('');
-  window.currentCustomerList = list;
-  box.style.display = 'block';
+function cleanText(v){ return String(v ?? '').replace(/\uFEFF/g,'').replace(/\s+/g,' ').trim(); }
+function searchText(v){ return cleanText(v).toLowerCase().replace(/[^a-z0-9]+/gi,' '); }
+function moneyNumber(v){ return Number(String(v ?? '').replace(/[^0-9.\-]/g,'')) || 0; }
+function pick(row, names){ const map = {}; Object.keys(row).forEach(k => map[searchText(k).replace(/ /g,'')] = row[k]); for(const name of names){ const key = searchText(name).replace(/ /g,''); if(map[key] !== undefined && cleanText(map[key]) !== '') return map[key]; } return ''; }
+function normalizeCustomers(rows){ return rows.map(r => ({ name: cleanText(pick(r, ['Customer Name','Customer','Name','Party Name','Party','Account Name']) || Object.values(r)[0] || ''), city: cleanText(pick(r, ['City','Area','Town','Location']) || Object.values(r)[1] || ''), mobile: cleanText(pick(r, ['Mobile','Mobile Number','Phone','Contact','Contact Number','Mob']) || Object.values(r)[2] || '') })).filter(r => r.name); }
+function normalizeProducts(rows){ return rows.map(r => { const vals = Object.values(r); const rate = moneyNumber(pick(r, ['Rate','MRP Rate','MRP','Price','Net Rate','Sale Rate','Selling Rate']) || vals[5] || vals[4] || 0); return { Group: cleanText(pick(r, ['Group','Brand','Category']) || vals[0] || 'Platinum'), Code: cleanText(pick(r, ['Code','Product Code','Item Code','SKU']) || vals[1] || vals[0] || ''), Description: cleanText(pick(r, ['Description','Product','Product Name','Item Name','Name']) || vals[2] || ''), Unit: cleanText(pick(r, ['Unit','UOM']) || 'PCS'), 'HSN Code': cleanText(pick(r, ['HSN Code','HSN','HSNCode']) || ''), Rate: rate, GST: cleanText(pick(r, ['GST','Tax','GST Rate']) || 'GST18') }; }).filter(r => r.Code && r.Rate > 0); }
+function csvToObjects(text){
+  text = String(text || '').replace(/^\uFEFF/, ''); if(!text.trim()) return [];
+  const firstLine = text.split(/\r?\n/).find(l => l.trim()) || '';
+  const delimiter = (firstLine.match(/;/g)||[]).length > (firstLine.match(/,/g)||[]).length ? ';' : (firstLine.includes('\t') ? '\t' : ',');
+  const rows = []; let row = [], cell = '', inQuotes = false;
+  for(let i=0;i<text.length;i++){ const ch = text[i], next = text[i+1]; if(ch === '"' && inQuotes && next === '"'){ cell += '"'; i++; continue; } if(ch === '"'){ inQuotes = !inQuotes; continue; } if(ch === delimiter && !inQuotes){ row.push(cell.trim()); cell = ''; continue; } if((ch === '\n' || ch === '\r') && !inQuotes){ if(ch === '\r' && next === '\n') i++; row.push(cell.trim()); if(row.some(x => cleanText(x) !== '')) rows.push(row); row = []; cell = ''; continue; } cell += ch; }
+  row.push(cell.trim()); if(row.some(x => cleanText(x) !== '')) rows.push(row); if(!rows.length) return [];
+  const heads = rows.shift().map(h => cleanText(h)); return rows.map(r => { const o = {}; heads.forEach((h,i)=> o[h || ('Column'+i)] = cleanText(r[i] || '')); return o; });
 }
-function selectCustomer(index){
-  const c = (window.currentCustomerList || [])[index];
-  if(!c) return;
-  document.getElementById('customerSearch').value = c.name;
-  document.getElementById('customerCity').value = c.city || '';
-  document.getElementById('customerMobile').value = c.mobile || '';
-  document.getElementById('customerSuggestions').style.display = 'none';
-}
-  const c = list[index] || customers.find(x => x.name === name);
-  if(!c) return;
-  document.getElementById('customerSearch').value = c.name;
-  document.getElementById('customerCity').value = c.city || '';
-  document.getElementById('customerMobile').value = c.mobile || '';
-  box.style.display = 'none';
-}
-function highlightText(text, q){
-  let out = escapeHtml(text);
-  q.split(/\s+/).filter(Boolean).forEach(w=>{
-    const safe = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    out = out.replace(new RegExp('('+safe+')','ig'), '<mark>$1</mark>');
-  });
-  return out;
-}
-
-function renderProducts(){
-  const sel = document.getElementById('productSelect');
-  sel.innerHTML = products.map((p,i)=>`<option value="${i}">${p.Code} - ${p.Group} - ${p.Description} - ${rupee(p.Rate)}</option>`).join('');
-  showDetails(); resetQty();
-}
-function showDetails(){
-  const p = products[document.getElementById('productSelect').value] || products[0];
-  if(!p) return;
-  document.getElementById('productDetails').innerHTML = `<b>Group:</b> ${p.Group} &nbsp; <b>Code:</b> ${p.Code} &nbsp; <b>Unit:</b> ${p.Unit} &nbsp; <b>HSN:</b> ${p['HSN Code']} &nbsp; <b>GST:</b> ${p.GST}<br><b>Description:</b> ${p.Description}<br><b>MRP:</b> ${rupee(p.Rate)} | <b>Net after 55% Less:</b> ${rupee(netRate(p.Rate))}`;
-}
+function setupCustomerSearch(){ const input = byId('customerSearch'), box = byId('customerSuggestions'); if(!input || !box) return; input.addEventListener('input', showCustomerSuggestions); input.addEventListener('focus', showCustomerSuggestions); document.addEventListener('click', e => { if(!e.target.closest('.customer-search-wrap')) box.style.display = 'none'; }); }
+function showCustomerSuggestions(){ const input = byId('customerSearch'), box = byId('customerSuggestions'); const q = searchText(input.value); if(byId('customerCity')) byId('customerCity').value = ''; if(byId('customerMobile')) byId('customerMobile').value = ''; if(q.length < 2){ box.style.display='none'; box.innerHTML=''; return; } const words = q.split(/\s+/).filter(Boolean); currentCustomerList = customers.filter(c => { const text = searchText(c.name + ' ' + c.city + ' ' + c.mobile); return words.every(w => text.includes(w)); }).slice(0, 30); if(!currentCustomerList.length){ box.innerHTML = `<div class="customer-option">No customer found<br><small>CSV loaded: ${customers.length} customers</small></div>`; box.style.display = 'block'; return; } box.innerHTML = currentCustomerList.map((c,i)=>`<div class="customer-option" data-index="${i}"><b>${escapeHtml(c.name)}</b><small>City: ${escapeHtml(c.city || '-')} &nbsp; | &nbsp; Mobile: ${escapeHtml(c.mobile || '-')}</small></div>`).join(''); box.querySelectorAll('.customer-option').forEach(el => el.addEventListener('click', () => selectCustomer(Number(el.dataset.index)))); box.style.display = 'block'; }
+function selectCustomer(index){ const c = currentCustomerList[index]; if(!c) return; byId('customerSearch').value = c.name; if(byId('customerCity')) byId('customerCity').value = c.city || ''; if(byId('customerMobile')) byId('customerMobile').value = c.mobile || ''; byId('customerSuggestions').style.display = 'none'; }
+function resetQty(){ if(byId('qty')) byId('qty').value = 0; }
+function renderProducts(){ const sel = byId('productSelect'); if(!sel) return; if(!products.length) products = [...DEFAULT_PRODUCTS]; sel.innerHTML = products.map((p,i)=>`<option value="${i}">${escapeHtml(p.Code)} - ${escapeHtml(p.Group)} - ${escapeHtml(p.Description)} - ${rupee(p.Rate)}</option>`).join(''); showDetails(); resetQty(); }
+function showDetails(){ const p = products[byId('productSelect').value] || products[0]; if(!p) return; byId('productDetails').innerHTML = `<b>Group:</b> ${escapeHtml(p.Group)} &nbsp; <b>Code:</b> ${escapeHtml(p.Code)} &nbsp; <b>Unit:</b> ${escapeHtml(p.Unit)} &nbsp; <b>HSN:</b> ${escapeHtml(p['HSN Code'])} &nbsp; <b>GST:</b> ${escapeHtml(p.GST)}<br><b>Description:</b> ${escapeHtml(p.Description)}<br><b>MRP:</b> ${rupee(p.Rate)} | <b>Net after 55% Less:</b> ${rupee(netRate(p.Rate))}`; }
 function addProduct(){
-  const p = products[document.getElementById('productSelect').value];
-  const qty = Number(document.getElementById('qty').value || 0);
+  const p = products[byId('productSelect').value];
+  const qty = Number(byId('qty').value || 0);
   if(!p){ alert('Product select karo.'); return; }
   if(qty <= 0){ alert('Qty 0 se jyada enter karo.'); return; }
-  order.push({...p, Qty: qty}); renderOrder(); resetQty();
+
+  // Same Part No. dobara add ho to new row nahi banegi; existing row me Qty merge hogi.
+  const code = cleanText(p.Code).toLowerCase();
+  const existing = order.find(item => cleanText(item.Code).toLowerCase() === code);
+  if(existing){
+    existing.Qty = Number(existing.Qty || 0) + qty;
+  }else{
+    order.push({...p, Qty: qty});
+  }
+
+  renderOrder();
+  resetQty();
 }
-function renderOrder(){
-  const body = document.querySelector('#orderTable tbody');
-  body.innerHTML = order.map((p,i)=>{
-    const nr = netRate(p.Rate), amt = nr * p.Qty;
-    return `<tr><td>${p.Group}</td><td>${p.Code}</td><td>${p.Description}</td><td>${p.Unit}</td><td>${p['HSN Code']}</td><td>${rupee(p.Rate)}</td><td>55%</td><td>${rupee(nr)}</td><td>${p.Qty}</td><td>${rupee(amt)}</td><td><button class="remove" onclick="removeItem(${i})">×</button></td></tr>`;
-  }).join(''); calc();
-}
+function renderOrder(){ const body = document.querySelector('#orderTable tbody'); if(!body) return; body.innerHTML = order.map((p,i)=>{ const nr = netRate(p.Rate), amt = nr * p.Qty; return `<tr><td>${escapeHtml(p.Group)}</td><td>${escapeHtml(p.Code)}</td><td>${escapeHtml(p.Description)}</td><td>${escapeHtml(p.Unit)}</td><td>${escapeHtml(p['HSN Code'])}</td><td>${rupee(p.Rate)}</td><td>55%</td><td>${rupee(nr)}</td><td>${p.Qty}</td><td>${rupee(amt)}</td><td><button class="remove" onclick="removeItem(${i})">×</button></td></tr>`; }).join(''); calc(); }
 function removeItem(i){ order.splice(i,1); renderOrder(); }
-function calc(){
-  const totalQty = order.reduce((s,p)=>s+Number(p.Qty||0),0);
-  const total = order.reduce((s,p)=>s+netRate(p.Rate)*Number(p.Qty||0),0);
-  const foc = Math.floor(total/10000);
-  document.getElementById('totalQty').textContent = totalQty;
-  document.getElementById('totalValue').textContent = rupee(total);
-  document.getElementById('focQty').textContent = foc + ' PCS';
+function calc(){ const totalQty = order.reduce((s,p)=>s+Number(p.Qty||0),0); const total = order.reduce((s,p)=>s+netRate(p.Rate)*Number(p.Qty||0),0); const foc = Math.floor(total/10000); if(byId('totalQty')) byId('totalQty').textContent = totalQty; if(byId('totalValue')) byId('totalValue').textContent = rupee(total); if(byId('focQty')) byId('focQty').textContent = foc + ' PCS'; }
+function wrapText(text, maxLen){
+  text = cleanText(text || '');
+  if(text.length <= maxLen) return text;
+  const words = text.split(' ');
+  let lines = [], line = '';
+  words.forEach(w => {
+    if((line + ' ' + w).trim().length > maxLen){
+      if(line) lines.push(line);
+      line = w;
+    }else{
+      line = (line + ' ' + w).trim();
+    }
+  });
+  if(line) lines.push(line);
+  return lines.join('\n');
+}
+
+function getOrderSummaryItems(){
+  const grouped = {};
+  order.forEach(p => {
+    const code = cleanText(p.Code || '');
+    if(!code) return;
+    const unit = cleanText(p.Unit || 'PCS') || 'PCS';
+    if(!grouped[code]) grouped[code] = {code:code, group:cleanText(p.Group || ''), qty:0, rate:Number(p.Rate||0), unit:unit};
+    grouped[code].qty += Number(p.Qty || 0);
+    grouped[code].unit = grouped[code].unit || unit;
+    grouped[code].rate = Number(p.Rate || grouped[code].rate || 0);
+  });
+  return Object.values(grouped);
+}
+
+function formatCol(text, width, alignRight=false){
+  text = cleanText(text);
+  if(text.length > width) text = text.slice(0, width-1) + '…';
+  return alignRight ? text.padStart(width, ' ') : text.padEnd(width, ' ');
+}
+
+function getSelectedCustomerDetails(){
+  const nameInput = byId('customerSearch');
+  const cityInput = byId('customerCity');
+  const mobileInput = byId('customerMobile');
+  const customerName = (nameInput && nameInput.value.trim()) || 'Not Selected';
+  let customerCity = (cityInput && cityInput.value.trim()) || '';
+  let customerMobile = (mobileInput && mobileInput.value.trim()) || '';
+
+  if((!customerCity || !customerMobile) && customerName && customerName !== 'Not Selected'){
+    const q = searchText(customerName);
+    const allCustomers = [];
+    if(Array.isArray(customers)) allCustomers.push(...customers);
+    if(Array.isArray(window.customers)) allCustomers.push(...window.customers);
+
+    let found = allCustomers.find(c => searchText(c.name) === q);
+    if(!found){
+      const words = q.split(/\s+/).filter(Boolean);
+      found = allCustomers.find(c => words.every(w => searchText(c.name).includes(w)));
+    }
+    if(found){
+      customerCity = customerCity || found.city || '';
+      customerMobile = customerMobile || found.mobile || '';
+      if(cityInput) cityInput.value = customerCity;
+      if(mobileInput) mobileInput.value = customerMobile;
+    }
+  }
+  return { customerName, customerCity: customerCity || '-', customerMobile: customerMobile || '-' };
 }
 
 
 function shareWhatsAppOrder(){
-  const customerName = document.getElementById('customerSearch').value.trim() || 'Not Selected';
-  const mobileNo = document.getElementById('customerMobile') ? document.getElementById('customerMobile').value.trim() : '';
-  const orderDate = document.getElementById('orderDate').value || '';
   if(order.length === 0){
-    alert('Pehle product add karo, phir WhatsApp par order share karo.');
+    alert('Pehle product add karo, phir Place Order karo.');
     return;
   }
-  const totalQty = order.reduce((s,p)=>s+Number(p.Qty||0),0);
-  const total = order.reduce((s,p)=>s+netRate(p.Rate)*Number(p.Qty||0),0);
+
+  const { customerName, customerCity, customerMobile } = getSelectedCustomerDetails();
+
+  const items = getOrderSummaryItems();
+  const totalQty = items.reduce((s,p)=>s+Number(p.qty||0),0);
+  const total = items.reduce((s,p)=>s+netRate(p.rate)*Number(p.qty||0),0);
   const foc = Math.floor(total/10000);
+  const remark = (document.getElementById('orderRemark')?.value || '').trim() || '-';
 
-  let msg = '';
-  msg += 'RAJ AGENCIES - COACH CABIN FAN ORDER%0A';
-  msg += '--------------------------------%0A';
-  msg += 'Order Date: ' + orderDate + '%0A';
-  msg += 'Customer Name: ' + customerName + '%0A';
-  msg += 'City: ' + ((document.getElementById('customerCity') && document.getElementById('customerCity').value) || '-') + '%0A';
-  msg += 'Mobile Number: ' + (mobileNo || '-') + '%0A';
-  msg += 'Order Type: Platinum Coach Cabin Fan Scheme%0A%0A';
-  msg += 'Product Details:%0A';
+  const line = '----------------------------------------';
+  let msg = '```';
+  msg += 'Party Name : ' + wrapText(customerName, 28).replace(/\n/g, '\n             ') + '\n';
+  msg += 'Mobile No. : ' + customerMobile + '\n';
+  msg += 'City       : ' + customerCity + '\n';
+  msg += line + '\n\n';
+  msg += formatCol('No',3) + formatCol('Part No',10) + formatCol('Brand/Group',15) + formatCol('Qty',10) + '\n';
+  msg += line + '\n';
 
-  order.forEach((p,i)=>{
-    const nr = netRate(p.Rate);
-    const amt = nr * Number(p.Qty||0);
-    msg += (i+1) + ') Code: ' + p.Code + '%0A';
-    msg += '   Group: ' + p.Group + '%0A';
-    msg += '   Description: ' + p.Description + '%0A';
-    msg += '   Unit: ' + p.Unit + ' | HSN: ' + p['HSN Code'] + ' | GST: ' + p.GST + '%0A';
-    msg += '   MRP: ' + rupee(p.Rate) + ' | Net Rate: ' + rupee(nr) + '%0A';
-    msg += '   Qty: ' + p.Qty + ' | Amount: ' + rupee(amt) + '%0A%0A';
+  items.forEach((p,i) => {
+    const qtyText = String(p.qty) + ' ' + (p.unit || 'PCS');
+    msg += formatCol(String(i+1),3) + formatCol(p.code,10) + formatCol(p.group || '-',15) + formatCol(qtyText,10) + '\n';
   });
 
-  msg += '--------------------------------%0A';
-  msg += 'Total Qty: ' + totalQty + '%0A';
-  msg += 'Total Billing Value: ' + rupee(total) + '%0A';
-  msg += 'Scheme FOC: ' + foc + ' PCS%0A';
-  msg += '--------------------------------%0A';
-  msg += 'Thank You';
+  msg += '\n' + line + '\n';
+  msg += 'Total Qty    : ' + totalQty + '\n';
+  msg += 'Total Amount : ' + rupee(total) + '\n';
+  msg += 'Scheme FOC   : ' + foc + ' PCS\n';
+  msg += 'Remark       : ' + wrapText(remark, 28).replace(/\n/g, '\n               ');
+  msg += '```';
 
-  const phone = '917046533330';
-  window.open('https://wa.me/' + phone + '?text=' + msg, '_blank');
+  window.open('https://wa.me/917046533330?text=' + encodeURIComponent(msg), '_blank');
 }
 
-function celebrateOrder(){
-  const customer = document.getElementById('customerSearch').value.trim() || 'Valued Customer';
-  document.getElementById('celebrationCustomer').textContent = customer;
-  const overlay = document.getElementById('celebrationOverlay');
-  const card = document.getElementById('celebrationCard');
-  overlay.style.display = 'flex';
-  card.querySelectorAll('.confetti-piece').forEach(e => e.remove());
-  const colors = ['#ffde59','#ff5a5f','#00a8ff','#22c55e','#a855f7','#f97316'];
-  for(let i=0;i<90;i++){
-    const p = document.createElement('span');
-    p.className = 'confetti-piece';
-    p.style.left = Math.random()*100 + '%';
-    p.style.background = colors[Math.floor(Math.random()*colors.length)];
-    p.style.animationDelay = (Math.random()*0.8) + 's';
-    p.style.animationDuration = (1.6 + Math.random()*1.4) + 's';
-    p.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
-    card.appendChild(p);
+function downloadOrderPDF(){
+  if(order.length === 0){
+    alert('Pehle product add karo, phir PDF download karo.');
+    return;
   }
+  const { customerName, customerCity, customerMobile } = getSelectedCustomerDetails();
+  const orderDate = (byId('orderDate') && byId('orderDate').value) || '';
+  const items = getOrderSummaryItems();
+  let totalQty = 0, totalValue = 0;
+  const rows = items.map((p,i)=>{
+    const rate = Number(p.rate || 0);
+    const discPct = 55;
+    const discAmt = rate * discPct / 100;
+    const net = rate - discAmt;
+    const amount = net * Number(p.qty || 0);
+    totalQty += Number(p.qty || 0);
+    totalValue += amount;
+    return `<tr>
+      <td>${i+1}</td>
+      <td>${escapeHtml(p.group || '-')}</td>
+      <td>${escapeHtml(p.code)}</td>
+      <td class="num">${p.qty} ${escapeHtml(p.unit || 'PCS')}</td>
+      <td class="num">${rupee(rate)}</td>
+      <td class="num">${discPct}%</td>
+      <td class="num">${rupee(discAmt)}</td>
+      <td class="num">${rupee(amount)}</td>
+    </tr>`;
+  }).join('');
+  const foc = Math.floor(totalValue/10000);
+  const billHtml = `<!doctype html>
+<html><head><meta charset="utf-8"><title>Raj Group Order PDF</title>
+<style>
+  *{box-sizing:border-box} body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:24px;color:#10233f;background:#fff;}
+  .bill{max-width:950px;margin:0 auto;border:2px solid #075bbb;border-radius:14px;overflow:hidden;}
+  .top{padding:18px 24px;text-align:center;border-bottom:4px solid #f5b301;background:linear-gradient(135deg,#f8fbff,#eaf4ff);}
+  .top img{max-width:210px;max-height:95px;object-fit:contain;}
+  .title{font-size:24px;font-weight:900;color:#075bbb;margin-top:8px;letter-spacing:.5px;}
+  .info{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:18px 24px;border-bottom:1px solid #c9d9f1;}
+  .info div{font-size:14px;line-height:1.5}.info b{color:#075bbb}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{background:#075bbb;color:#fff;padding:10px 8px;text-align:left;border:1px solid #075bbb;}
+  td{padding:9px 8px;border:1px solid #d8e3f5;vertical-align:top;}
+  tr:nth-child(even) td{background:#f8fbff;} .num{text-align:right;white-space:nowrap;}
+  .summary{padding:18px 24px;display:flex;justify-content:flex-end;}
+  .summary table{width:360px;font-size:15px;} .summary td{border:0;border-bottom:1px solid #d8e3f5;padding:8px;}
+  .summary .grand td{font-size:18px;font-weight:900;color:#075bbb;border-top:3px solid #f5b301;}
+  .remark{padding:0 24px 24px;font-size:14px;}
+  @media print{body{padding:0}.bill{border-radius:0;max-width:none;border:0}.no-print{display:none}}
+</style></head>
+<body>
+  <div class="bill">
+    <div class="top"><img src="assets/raj-group-logo.png"><div class="title">ORDER BILL</div></div>
+    <div class="info">
+      <div><b>Party Name:</b> ${escapeHtml(customerName)}<br><b>Mobile No.:</b> ${escapeHtml(customerMobile)}<br><b>City:</b> ${escapeHtml(customerCity)}</div>
+      <div><b>Order Date:</b> ${escapeHtml(orderDate)}<br><b>Scheme:</b> Coach Cabin Fan Offer<br><b>FOC:</b> ${foc} PCS</div>
+    </div>
+    <table><thead><tr><th>No</th><th>Brand / Group</th><th>Part No</th><th>Qty</th><th>Rate</th><th>Disc</th><th>Disc Amt</th><th>Total Amount</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="summary"><table>
+      <tr><td>Total Qty</td><td class="num"><b>${totalQty}</b></td></tr>
+      <tr><td>Scheme FOC</td><td class="num"><b>${foc} PCS</b></td></tr>
+      <tr class="grand"><td>Total Value</td><td class="num">${rupee(totalValue)}</td></tr>
+    </table></div>
+    <div class="remark"><b>Remark:</b> ${escapeHtml((document.getElementById('orderRemark')?.value || '').trim() || '________________________________')}</div>
+  </div>
+  <script>window.onload=function(){setTimeout(function(){window.print();},350)}<\/script>
+</body></html>`;
+  const w = window.open('', '_blank');
+  if(!w){ alert('Popup allow karo, phir PDF download hoga.'); return; }
+  w.document.open();
+  w.document.write(billHtml);
+  w.document.close();
 }
 
-function readSheet(e, cb){
-  const file = e.target.files[0]; if(!file) return;
-  if(!window.XLSX && !file.name.toLowerCase().endsWith('.csv')) { alert('Excel read library internet se load nahi hui. CSV upload karo ya internet ON karke reload karo.'); return; }
-  const reader = new FileReader();
-  reader.onload = evt => {
-    let rows=[];
-    if(file.name.toLowerCase().endsWith('.csv')){
-      rows = csvToObjects(evt.target.result);
-    } else {
-      const wb = XLSX.read(evt.target.result, {type:'array'});
-      rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:''});
-    }
-    cb(rows);
-  };
-  file.name.toLowerCase().endsWith('.csv') ? reader.readAsText(file) : reader.readAsArrayBuffer(file);
-}
-function normalizeProducts(rows){
- return rows.map(r=>({Group:r.Group||'',Code:r.Code||'',Description:r.Description||'',Unit:r.Unit||'PCS','HSN Code':r['HSN Code']||r.HSN||'',Rate:Number(r.Rate||0),GST:r.GST||''})).filter(r=>r.Code && r.Rate);
-}
-
-
-async function fetchFirstAvailable(paths){
-  for(const path of paths){
-    try{
-      const res = await fetch(path, {cache:'no-store'});
-      if(res.ok) return await res.text();
-    }catch(e){}
-  }
-  throw new Error('CSV not found');
-}
-function cleanText(v){
-  return String(v || '').replace(/\uFEFF/g,'').replace(/\s+/g,' ').trim();
-}
-function searchText(v){
-  return cleanText(v).toLowerCase().replace(/[^a-z0-9]+/gi,' ');
-}
-
-async function fetchFirstAvailable(paths){
-  for(const path of paths){
-    try{
-      const res = await fetch(path, {cache:'no-store'});
-      if(res.ok) return await res.text();
-    }catch(e){}
-  }
-  throw new Error('CSV not found');
-}
-function cleanText(v){
-  return String(v || '').replace(/\uFEFF/g,'').replace(/\s+/g,' ').trim();
-}
-function searchText(v){
-  return cleanText(v).toLowerCase().replace(/[^a-z0-9]+/gi,' ');
-}
-function csvToObjects(text){
-  text = String(text || '').replace(/^\uFEFF/, '');
-  if(!text.trim()) return [];
-  const rows = [];
-  let row = [], cell = '', inQuotes = false;
-  for(let i=0;i<text.length;i++){
-    const ch = text[i];
-    const next = text[i+1];
-    if(ch === '"' && inQuotes && next === '"'){ cell += '"'; i++; continue; }
-    if(ch === '"'){ inQuotes = !inQuotes; continue; }
-    if(ch === ',' && !inQuotes){ row.push(cell.trim()); cell = ''; continue; }
-    if((ch === '\n' || ch === '\r') && !inQuotes){
-      if(ch === '\r' && next === '\n') i++;
-      row.push(cell.trim());
-      if(row.some(x => String(x).trim() !== '')) rows.push(row);
-      row = []; cell = '';
-      continue;
-    }
-    cell += ch;
-  }
-  row.push(cell.trim());
-  if(row.some(x => String(x).trim() !== '')) rows.push(row);
-  if(!rows.length) return [];
-  const heads = rows.shift().map(h => cleanText(h));
-  return rows.map(r => {
-    const o = {};
-    heads.forEach((h,i)=> o[h] = cleanText(r[i] || ''));
-    return o;
-  });
-}
-
-
-
-function escapeHtml(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
-init();
+function celebrateOrder(){ const customer = byId('customerSearch').value.trim() || 'Valued Customer'; byId('celebrationCustomer').textContent = customer; const overlay = byId('celebrationOverlay'), card = byId('celebrationCard'); overlay.style.display = 'flex'; card.querySelectorAll('.confetti-piece').forEach(e => e.remove()); const colors = ['#ffde59','#ff5a5f','#00a8ff','#22c55e','#a855f7','#f97316']; for(let i=0;i<90;i++){ const p = document.createElement('span'); p.className = 'confetti-piece'; p.style.left = Math.random()*100 + '%'; p.style.background = colors[Math.floor(Math.random()*colors.length)]; p.style.animationDelay = (Math.random()*0.8) + 's'; p.style.animationDuration = (1.6 + Math.random()*1.4) + 's'; card.appendChild(p); } }
+function escapeHtml(s){ return String(s ?? '').replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+window.removeItem = removeItem;
+window.addEventListener('DOMContentLoaded', init);
 </script>
 
 <script id="embeddedCustomerCsv" type="text/plain">Customer Name,City,Mobile
