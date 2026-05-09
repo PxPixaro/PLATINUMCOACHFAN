@@ -423,6 +423,55 @@ button:hover, #addBtn:hover, .secondary:hover{
 }
 </style>
 
+
+<style>
+.customer-search-wrap{position:relative;}
+.customer-suggestions{
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  z-index:50;
+  display:none;
+  max-height:260px;
+  overflow-y:auto;
+  background:#fff;
+  border:1px solid #b8cbe8;
+  border-radius:12px;
+  box-shadow:0 14px 34px rgba(0,0,0,.18);
+  margin-top:6px;
+}
+.customer-option{
+  padding:10px 12px;
+  cursor:pointer;
+  border-bottom:1px solid #eef3fb;
+  font-size:14px;
+  line-height:1.35;
+}
+.customer-option:hover{
+  background:#eaf4ff;
+}
+.customer-option b{
+  color:#06468e;
+}
+.customer-option small{
+  display:block;
+  color:#475569;
+  margin-top:3px;
+}
+@media(max-width:768px){
+  .customer-suggestions{
+    position:relative;
+    max-height:210px;
+    margin-top:8px;
+  }
+  .customer-option{
+    font-size:13px;
+    padding:9px 10px;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="page-bg"></div>
@@ -450,15 +499,18 @@ button:hover, #addBtn:hover, .secondary:hover{
         <label>Order Date
           <input id="orderDate" type="date" />
         </label>
-        <label>Customer Search / Name
-          <input id="customerSearch" list="customerList" placeholder="Customer name search karo" />
-          <datalist id="customerList"></datalist>
+        <label class="customer-search-wrap">Customer Search / Name
+          <input id="customerSearch" type="text" autocomplete="off" placeholder="Party ke 2-3 word type karo" />
+          <div id="customerSuggestions" class="customer-suggestions"></div>
+        </label>
+        <label>City
+          <input id="customerCity" type="text" placeholder="Auto city" readonly />
         </label>
         <label>Mobile Number
-          <input id="customerMobile" type="tel" placeholder="Customer mobile number" />
+          <input id="customerMobile" type="tel" placeholder="Auto mobile number" readonly />
         </label>
       </div>
-      <p class="hint">Customer list auto <b>assets/Customer.csv</b> se aur product list auto <b>data/products.csv</b> se load hogi. Product add/rate change CSV me kar do, phir page refresh karo.</p>
+      <p class="hint">Customer list auto <b>data/Customer.csv</b> se aur product list auto <b>data/products.csv</b> se load hogi. Product add/rate change CSV me kar do, phir page refresh karo.</p>
     </section>
 
     <section class="panel product-picker">
@@ -519,7 +571,7 @@ const DEFAULT_PRODUCTS = [
 ];
 let products = [...DEFAULT_PRODUCTS];
 let order = [];
-let customers = ['ABC Traders','Shree Sales','Raj Motors'];
+let customers = [{name:'ABC Traders',city:'',mobile:''},{name:'Shree Sales',city:'',mobile:''},{name:'Raj Motors',city:'',mobile:''}];
 const rupee = n => '₹' + Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
 const netRate = r => Number(r||0) * 0.45;
 async function init(){
@@ -541,14 +593,83 @@ async function loadCsvData(){
     if(loaded.length) products = loaded;
   }catch(e){ console.warn('data/products.csv auto load nahi hua, default products use honge.', e); }
   try{
-    const customerText = await fetch('assets/Customer.csv', {cache:'no-store'}).then(r => r.ok ? r.text() : Promise.reject());
+    let customerText = '';
+    try{
+      customerText = await fetch('data/Customer.csv', {cache:'no-store'}).then(r => r.ok ? r.text() : Promise.reject());
+    }catch(e1){
+      customerText = await fetch('assets/Customer.csv', {cache:'no-store'}).then(r => r.ok ? r.text() : Promise.reject());
+    }
     const rows = csvToObjects(customerText);
-    const loaded = rows.map(r => r['Customer Name'] || r.Name || r.Customer || Object.values(r)[0]).filter(Boolean);
+    const loaded = rows.map(r => ({
+      name: (r['Customer Name'] || r.Name || r.Customer || Object.values(r)[0] || '').trim(),
+      city: (r.City || r.city || '').trim(),
+      mobile: (r.Mobile || r.mobile || r['Mobile Number'] || r.Phone || r.phone || '').trim()
+    })).filter(r => r.name);
     if(loaded.length) customers = loaded;
-  }catch(e){ console.warn('assets/Customer.csv auto load nahi hua, default customers use honge.', e); }
+  }catch(e){ console.warn('data/Customer.csv auto load nahi hua, default customers use honge.', e); }
 }
 function resetQty(){ document.getElementById('qty').value = 0; }
-function renderCustomers(){ document.getElementById('customerList').innerHTML = customers.map(c=>`<option value="${escapeHtml(c)}"></option>`).join(''); }
+function renderCustomers(){
+  const input = document.getElementById('customerSearch');
+  const box = document.getElementById('customerSuggestions');
+  if(!input || !box) return;
+  input.addEventListener('input', showCustomerSuggestions);
+  input.addEventListener('focus', showCustomerSuggestions);
+  document.addEventListener('click', (e)=>{
+    if(!e.target.closest('.customer-search-wrap')) box.style.display = 'none';
+  });
+}
+
+function showCustomerSuggestions(){
+  const input = document.getElementById('customerSearch');
+  const box = document.getElementById('customerSuggestions');
+  const q = input.value.trim().toLowerCase();
+  document.getElementById('customerCity').value = '';
+  document.getElementById('customerMobile').value = '';
+  if(q.length < 2){
+    box.style.display = 'none';
+    box.innerHTML = '';
+    return;
+  }
+  const words = q.split(/\s+/).filter(Boolean);
+  const list = customers.filter(c => {
+    const text = (c.name + ' ' + c.city + ' ' + c.mobile).toLowerCase();
+    return words.every(w => text.includes(w));
+  }).slice(0, 25);
+  if(!list.length){
+    box.innerHTML = '<div class="customer-option">No customer found</div>';
+    box.style.display = 'block';
+    return;
+  }
+  box.innerHTML = list.map((c,i)=>`
+    <div class="customer-option" onclick="selectCustomer(${i}, '${escapeHtml(c.name).replace(/'/g, '&#39;')}')">
+      <b>${highlightText(c.name, q)}</b>
+      <small>City: ${escapeHtml(c.city || '-')} &nbsp; | &nbsp; Mobile: ${escapeHtml(c.mobile || '-')}</small>
+    </div>
+  `).join('');
+  box.dataset.currentList = JSON.stringify(list);
+  box.style.display = 'block';
+}
+function selectCustomer(index, name){
+  const box = document.getElementById('customerSuggestions');
+  let list = [];
+  try{ list = JSON.parse(box.dataset.currentList || '[]'); }catch(e){}
+  const c = list[index] || customers.find(x => x.name === name);
+  if(!c) return;
+  document.getElementById('customerSearch').value = c.name;
+  document.getElementById('customerCity').value = c.city || '';
+  document.getElementById('customerMobile').value = c.mobile || '';
+  box.style.display = 'none';
+}
+function highlightText(text, q){
+  let out = escapeHtml(text);
+  q.split(/\s+/).filter(Boolean).forEach(w=>{
+    const safe = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    out = out.replace(new RegExp('('+safe+')','ig'), '<mark>$1</mark>');
+  });
+  return out;
+}
+
 function renderProducts(){
   const sel = document.getElementById('productSelect');
   sel.innerHTML = products.map((p,i)=>`<option value="${i}">${p.Code} - ${p.Group} - ${p.Description} - ${rupee(p.Rate)}</option>`).join('');
@@ -601,6 +722,7 @@ function shareWhatsAppOrder(){
   msg += '--------------------------------%0A';
   msg += 'Order Date: ' + orderDate + '%0A';
   msg += 'Customer Name: ' + customerName + '%0A';
+  msg += 'City: ' + ((document.getElementById('customerCity') && document.getElementById('customerCity').value) || '-') + '%0A';
   msg += 'Mobile Number: ' + (mobileNo || '-') + '%0A';
   msg += 'Order Type: Platinum Coach Cabin Fan Scheme%0A%0A';
   msg += 'Product Details:%0A';
