@@ -510,7 +510,7 @@ button:hover, #addBtn:hover, .secondary:hover{
           <input id="customerMobile" type="tel" placeholder="Auto mobile number" readonly />
         </label>
       </div>
-      <p class="hint">Customer list auto <b>data/Customer.csv</b> se aur product list auto <b>data/products.csv</b> se load hogi. Product add/rate change CSV me kar do, phir page refresh karo.</p>
+      <p class="hint">Customer list auto <b>data/customers.csv</b> se aur product list auto <b>data/products.csv</b> se load hogi. Product add/rate change CSV me kar do, phir page refresh karo.</p>
     </section>
 
     <section class="panel product-picker">
@@ -593,20 +593,15 @@ async function loadCsvData(){
     if(loaded.length) products = loaded;
   }catch(e){ console.warn('data/products.csv auto load nahi hua, default products use honge.', e); }
   try{
-    let customerText = '';
-    try{
-      customerText = await fetch('data/Customer.csv', {cache:'no-store'}).then(r => r.ok ? r.text() : Promise.reject());
-    }catch(e1){
-      customerText = await fetch('assets/Customer.csv', {cache:'no-store'}).then(r => r.ok ? r.text() : Promise.reject());
-    }
+    const customerText = await fetchFirstAvailable(['data/customers.csv','data/customers.csv','assets/customers.csv','assets/customers.csv']);
     const rows = csvToObjects(customerText);
     const loaded = rows.map(r => ({
-      name: (r['Customer Name'] || r.Name || r.Customer || Object.values(r)[0] || '').trim(),
-      city: (r.City || r.city || '').trim(),
-      mobile: (r.Mobile || r.mobile || r['Mobile Number'] || r.Phone || r.phone || '').trim()
+      name: (r['Customer Name'] || r['Customer'] || r.Name || r.Party || Object.values(r)[0] || '').trim(),
+      city: (r.City || r.city || Object.values(r)[1] || '').trim(),
+      mobile: (r.Mobile || r.mobile || r['Mobile Number'] || r.Phone || r.phone || Object.values(r)[2] || '').trim()
     })).filter(r => r.name);
     if(loaded.length) customers = loaded;
-  }catch(e){ console.warn('data/Customer.csv auto load nahi hua, default customers use honge.', e); }
+  }catch(e){ console.warn('Customer CSV auto load nahi hua. File ko data/customers.csv naam se rakho.', e); }
 }
 function resetQty(){ document.getElementById('qty').value = 0; }
 function renderCustomers(){
@@ -623,7 +618,7 @@ function renderCustomers(){
 function showCustomerSuggestions(){
   const input = document.getElementById('customerSearch');
   const box = document.getElementById('customerSuggestions');
-  const q = input.value.trim().toLowerCase();
+  const q = input.value.trim().toLowerCase().replace(/\s+/g,' ');
   document.getElementById('customerCity').value = '';
   document.getElementById('customerMobile').value = '';
   if(q.length < 2){
@@ -633,7 +628,7 @@ function showCustomerSuggestions(){
   }
   const words = q.split(/\s+/).filter(Boolean);
   const list = customers.filter(c => {
-    const text = (c.name + ' ' + c.city + ' ' + c.mobile).toLowerCase();
+    const text = (c.name + ' ' + c.city + ' ' + c.mobile).toLowerCase().replace(/\s+/g,' ');
     return words.every(w => text.includes(w));
   }).slice(0, 25);
   if(!list.length){
@@ -788,10 +783,46 @@ function readSheet(e, cb){
 function normalizeProducts(rows){
  return rows.map(r=>({Group:r.Group||'',Code:r.Code||'',Description:r.Description||'',Unit:r.Unit||'PCS','HSN Code':r['HSN Code']||r.HSN||'',Rate:Number(r.Rate||0),GST:r.GST||''})).filter(r=>r.Code && r.Rate);
 }
-function csvToObjects(text){
- const lines = text.trim().split(/\r?\n/); const heads = lines.shift().split(',').map(h=>h.trim());
- return lines.map(line=>{ const cells=line.match(/("[^"]*(""[^"]*)*"|[^,]*)/g).filter((_,i)=>i%2===0).map(c=>c.replace(/^"|"$/g,'').replace(/""/g,'"')); let o={}; heads.forEach((h,i)=>o[h]=cells[i]||''); return o; });
+
+async function fetchFirstAvailable(paths){
+  for(const path of paths){
+    try{
+      const res = await fetch(path, {cache:'no-store'});
+      if(res.ok) return await res.text();
+    }catch(e){}
+  }
+  throw new Error('CSV not found: ' + paths.join(', '));
 }
+function csvToObjects(text){
+  text = String(text || '').replace(/^\uFEFF/, '').trim();
+  if(!text) return [];
+  const rows = [];
+  let row = [], cell = '', inQuotes = false;
+  for(let i=0;i<text.length;i++){
+    const ch = text[i], next = text[i+1];
+    if(ch === '"' && inQuotes && next === '"'){ cell += '"'; i++; continue; }
+    if(ch === '"'){ inQuotes = !inQuotes; continue; }
+    if(ch === ',' && !inQuotes){ row.push(cell.trim()); cell = ''; continue; }
+    if((ch === '\n' || ch === '\r') && !inQuotes){
+      if(ch === '\r' && next === '\n') i++;
+      row.push(cell.trim()); cell = '';
+      if(row.some(v => v !== '')) rows.push(row);
+      row = [];
+      continue;
+    }
+    cell += ch;
+  }
+  row.push(cell.trim());
+  if(row.some(v => v !== '')) rows.push(row);
+  if(!rows.length) return [];
+  const heads = rows.shift().map(h => h.trim().replace(/^\uFEFF/, ''));
+  return rows.map(r => {
+    const o = {};
+    heads.forEach((h,i)=> o[h] = (r[i] || '').trim());
+    return o;
+  });
+}
+
 function escapeHtml(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
 init();
 </script>
