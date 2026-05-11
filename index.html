@@ -854,6 +854,113 @@ button:hover, #addBtn:hover, .secondary:hover{
 @media(max-width:900px){.category-checkbox-list{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:560px){.category-checkbox-list{grid-template-columns:1fr;}}
 </style>
+
+<style>
+/* --- Offer title spacing fix --- */
+.offer-title{
+  line-height:1.18 !important;
+}
+.offer-title .offer-line{
+  display:block;
+  margin-bottom:6px;
+}
+.offer-title mark{
+  display:inline-block;
+  margin-left:8px;
+  vertical-align:middle;
+}
+.offer-title .foc-highlight{
+  color:#e0a100;
+  display:inline-block;
+}
+@media(max-width:768px){
+  .offer-title{line-height:1.2 !important;}
+  .offer-title .offer-line{margin-bottom:5px;}
+  .offer-title mark{margin-left:4px;}
+}
+</style>
+
+
+<style>
+/* --- Mobile compact product category table fix --- */
+@media(max-width:768px){
+  .category-table-wrap{
+    overflow-x:hidden !important;
+    width:100% !important;
+  }
+  .category-product-table{
+    width:100% !important;
+    min-width:0 !important;
+    table-layout:fixed !important;
+    font-size:12px !important;
+  }
+  .category-product-table th,
+  .category-product-table td{
+    padding:7px 4px !important;
+    white-space:normal !important;
+    word-break:break-word !important;
+    line-height:1.25 !important;
+  }
+  /* Mobile me extra columns hide, taki Qty +/- hamesha screen par dikhe */
+  .category-product-table th:nth-child(1),
+  .category-product-table td:nth-child(1),
+  .category-product-table th:nth-child(3),
+  .category-product-table td:nth-child(3),
+  .category-product-table th:nth-child(5),
+  .category-product-table td:nth-child(5){
+    display:none !important;
+  }
+  .category-product-table th:nth-child(2),
+  .category-product-table td:nth-child(2){width:52px !important;}
+  .category-product-table th:nth-child(4),
+  .category-product-table td:nth-child(4){width:auto !important;}
+  .category-product-table th:nth-child(6),
+  .category-product-table td:nth-child(6){width:62px !important;text-align:center !important;}
+  .category-product-table th:nth-child(7),
+  .category-product-table td:nth-child(7){width:112px !important;text-align:center !important;}
+  .qty-control{
+    gap:3px !important;
+    justify-content:center !important;
+    width:100% !important;
+  }
+  .qty-control button{
+    width:30px !important;
+    min-width:30px !important;
+    height:32px !important;
+    min-height:32px !important;
+    padding:0 !important;
+    border-radius:9px !important;
+    font-size:16px !important;
+  }
+  .qty-control input{
+    width:40px !important;
+    min-width:40px !important;
+    height:32px !important;
+    min-height:32px !important;
+    padding:3px 2px !important;
+    font-size:13px !important;
+    text-align:center !important;
+  }
+  #categoryProductWrap .category-selected-pill,
+  .category-selected-pill{
+    font-size:13px !important;
+    line-height:1.35 !important;
+  }
+}
+
+@media(max-width:390px){
+  .category-product-table{font-size:11px !important;}
+  .category-product-table th:nth-child(2),
+  .category-product-table td:nth-child(2){width:48px !important;}
+  .category-product-table th:nth-child(6),
+  .category-product-table td:nth-child(6){width:56px !important;}
+  .category-product-table th:nth-child(7),
+  .category-product-table td:nth-child(7){width:104px !important;}
+  .qty-control button{width:28px !important;min-width:28px !important;}
+  .qty-control input{width:36px !important;min-width:36px !important;}
+}
+</style>
+
 </head>
 <body>
   <div class="page-bg"></div>
@@ -866,7 +973,7 @@ button:hover, #addBtn:hover, .secondary:hover{
     <div class="hero-grid">
       <div class="hero-copy">
         <div class="tag">COACH CABIN FAN</div>
-        <h1>₹10,000 <mark>1 Bill Value</mark> पर <span>1 PCS FOC</span></h1>
+        <h1 class="offer-title"><span class="offer-line">₹10,000 <mark>1 Bill Value</mark></span><span class="offer-line">पर <span class="foc-highlight">1 PCS FOC</span></span></h1>
         <p>Mix product <b>1 Bill Value</b> ₹10,000 या उससे ऊपर होने पर auto scheme calculate होगी. ₹20,000 पर 2 PCS FOC, ₹30,000 पर 3 PCS FOC.</p>
       </div>
       <div class="fan-card">
@@ -1674,6 +1781,113 @@ function downloadOrderPDF(){
 @media(max-width:900px){.category-checkbox-list{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:560px){.category-checkbox-list{grid-template-columns:1fr;}}
 </style>
+
+<style>
+/* --- Offer title spacing fix --- */
+.offer-title{
+  line-height:1.18 !important;
+}
+.offer-title .offer-line{
+  display:block;
+  margin-bottom:6px;
+}
+.offer-title mark{
+  display:inline-block;
+  margin-left:8px;
+  vertical-align:middle;
+}
+.offer-title .foc-highlight{
+  color:#e0a100;
+  display:inline-block;
+}
+@media(max-width:768px){
+  .offer-title{line-height:1.2 !important;}
+  .offer-title .offer-line{margin-bottom:5px;}
+  .offer-title mark{margin-left:4px;}
+}
+</style>
+
+
+<style>
+/* --- Mobile compact product category table fix --- */
+@media(max-width:768px){
+  .category-table-wrap{
+    overflow-x:hidden !important;
+    width:100% !important;
+  }
+  .category-product-table{
+    width:100% !important;
+    min-width:0 !important;
+    table-layout:fixed !important;
+    font-size:12px !important;
+  }
+  .category-product-table th,
+  .category-product-table td{
+    padding:7px 4px !important;
+    white-space:normal !important;
+    word-break:break-word !important;
+    line-height:1.25 !important;
+  }
+  /* Mobile me extra columns hide, taki Qty +/- hamesha screen par dikhe */
+  .category-product-table th:nth-child(1),
+  .category-product-table td:nth-child(1),
+  .category-product-table th:nth-child(3),
+  .category-product-table td:nth-child(3),
+  .category-product-table th:nth-child(5),
+  .category-product-table td:nth-child(5){
+    display:none !important;
+  }
+  .category-product-table th:nth-child(2),
+  .category-product-table td:nth-child(2){width:52px !important;}
+  .category-product-table th:nth-child(4),
+  .category-product-table td:nth-child(4){width:auto !important;}
+  .category-product-table th:nth-child(6),
+  .category-product-table td:nth-child(6){width:62px !important;text-align:center !important;}
+  .category-product-table th:nth-child(7),
+  .category-product-table td:nth-child(7){width:112px !important;text-align:center !important;}
+  .qty-control{
+    gap:3px !important;
+    justify-content:center !important;
+    width:100% !important;
+  }
+  .qty-control button{
+    width:30px !important;
+    min-width:30px !important;
+    height:32px !important;
+    min-height:32px !important;
+    padding:0 !important;
+    border-radius:9px !important;
+    font-size:16px !important;
+  }
+  .qty-control input{
+    width:40px !important;
+    min-width:40px !important;
+    height:32px !important;
+    min-height:32px !important;
+    padding:3px 2px !important;
+    font-size:13px !important;
+    text-align:center !important;
+  }
+  #categoryProductWrap .category-selected-pill,
+  .category-selected-pill{
+    font-size:13px !important;
+    line-height:1.35 !important;
+  }
+}
+
+@media(max-width:390px){
+  .category-product-table{font-size:11px !important;}
+  .category-product-table th:nth-child(2),
+  .category-product-table td:nth-child(2){width:48px !important;}
+  .category-product-table th:nth-child(6),
+  .category-product-table td:nth-child(6){width:56px !important;}
+  .category-product-table th:nth-child(7),
+  .category-product-table td:nth-child(7){width:104px !important;}
+  .qty-control button{width:28px !important;min-width:28px !important;}
+  .qty-control input{width:36px !important;min-width:36px !important;}
+}
+</style>
+
 </head>
 <body>
   <div class="bill">
